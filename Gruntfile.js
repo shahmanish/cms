@@ -7,21 +7,26 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("default", "Start web server", function() {
+  grunt.registerTask("default", "Start web server", function(port) {
 
     var
-      http = require("http"),
-      express = require("express"),
-      app = express(),
+      webServer = require("./web-server"),
       webServerConfig = grunt.config("webServer");
+
 
     this.async();
 
-    app.use(express.static(webServerConfig.rootFolder));
+    webServerConfig.port = port || webServerConfig.port;
 
-    http.createServer(app).listen(webServerConfig.port, function() {
+    webServer(webServerConfig, function() {
       grunt.log.writeln("Web server listening on port " + webServerConfig.port);
     });
 
   });
+
+  grunt.registerTask("haveABaby", function(name, length, weight) {
+    console.log("here comes my tax deduction.");
+    console.log(arguments);
+  });
+
 };
