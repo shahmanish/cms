@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.12.3"
+    "express": "^4.12.3",
+    "websocket": "^1.0.18"
   },
   "devDependencies": {
     "grunt": "^0.4.5"
