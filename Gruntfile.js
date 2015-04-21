@@ -16,8 +16,8 @@ module.exports = function(grunt) {
     loggerConfig: {
       transports:  {
         console: { level: "debug"},
-        file:  { level: "debug"},
-        mongodb: { level: "debug", db: "mongodb://localhost/logs"}
+        file:  { level: "debug"}
+        //mongodb: { level: "debug", db: "mongodb://localhost/logs"}
         //papertrail: {host: "logs2.papertrailapp.com", port: "43476", level: "debug"}
       }
     }

@@ -3,6 +3,9 @@
 window.addEventListener("DOMContentLoaded", function() {
 
 	var submitButton = document.getElementById("submitButton");
+  var logoutButton = document.getElementById("logoutButton");
+
+  var win = document.defaultView || document.parentWindow;
 
   submitButton.addEventListener("click", function(e) {
 
@@ -17,8 +20,6 @@ window.addEventListener("DOMContentLoaded", function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				var o = JSON.parse(xhr.responseText)
 				console.log(o);
-        //var doc = element.ownerDocument;
-        var win = document.defaultView || document.parentWindow;
 
         if (o !== "null") {
           win.alert("Success: You are now logged in.");
@@ -38,5 +39,13 @@ window.addEventListener("DOMContentLoaded", function() {
     xhr.send(JSON.stringify(o));
 
 	});
+
+  logoutButton.addEventListener("click", function(e) {
+    console.log("logout button clicked.");
+    win.alert(document.cookie);
+    //var cookie = document.cookie;
+    //console.dir(cookie);
+  });
+
 
 });
