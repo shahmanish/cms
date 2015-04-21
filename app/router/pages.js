@@ -20,6 +20,8 @@ module.exports = function(config, mongoose) {
   pagesRouter.route("/pages")
     .get(function(req, res) {
 
+      console.log(req.user);
+
       var t = new PageModel(req.body.page);
       PageModel.find({}, function(err, pages) {
         if (err) {

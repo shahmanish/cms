@@ -7,16 +7,16 @@ module.exports = function(webServer, logger) {
 
   wss.on("connection", function(ws) {
 
-    logger.info("web sockets open");
-
-    ws.on("error", function(data) {
-      logger.error("web sockets error");
-    });
-
-    ws.on("close", function(data) {
-      logger.info("web sockets closed");
-    });
-
+    // logger.info("web sockets open");
+    //
+    // ws.on("error", function(data) {
+    //   logger.error("web sockets error");
+    // });
+    //
+    // ws.on("close", function(data) {
+    //   logger.info("web sockets closed");
+    // });
+    //
     ws.on("message", function(msg) {
       var data = JSON.parse(msg);
 

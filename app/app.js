@@ -6,11 +6,31 @@ module.exports = function(config) {
     multer = require("multer"),
     mongoose = require("mongoose"),
     fs = require('fs'),
-    app = express();
+    session = require('express-session'),
+    passport = require("passport"),
+    crypto = require("crypto"),
+    app = express(),
     logger = require("./logger")(config.loggerConfig);
 
   config.logger = logger;
-  
+
+  passport.serializeUser(function(user, done) {
+    	done(null, user);
+  	});
+
+	passport.deserializeUser(function(user, done) {
+  	done(null, user);
+	});
+
+	app.use(session({
+		resave: false,
+		saveUninitialized: false,
+		secret : "asecret"
+	}));
+
+	app.use(passport.initialize());
+	app.use(passport.session());
+
   app.use(express.static(config.httpServer.wwwRoot));
 
   mongoose.connect("mongodb://" +
@@ -21,6 +41,7 @@ module.exports = function(config) {
   app.use("/api", require("./router/pages.js")(config, mongoose));
   app.use("/api", require("./router/donations.js")(config, mongoose));
   app.use("/api", require("./router/galleries.js")(config, mongoose));
+  app.use("/api", require("./router/accounts.js")(config, mongoose));
 
 /*
   var fileSchema = mongoose.Schema({

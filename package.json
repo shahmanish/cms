@@ -10,9 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.12.3",
+    "crypto": "0.0.3",
     "express": "^4.12.3",
+    "express-session": "^1.11.1",
     "mongoose": "^4.0.1",
     "multer": "^0.1.8",
+    "passport": "^0.2.1",
     "websocket": "^1.0.18",
     "winston": "^1.0.0",
     "winston-mongodb": "^1.1.1",
