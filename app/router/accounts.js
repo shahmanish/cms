@@ -4,6 +4,7 @@ module.exports = function(config, mongoose) {
     express = require("express"),
     accountsRouter = express.Router(),
     logger = config.logger,
+    csrf = require("csrf")(),
     crypto = require("crypto");
 
   var accountSchema = mongoose.Schema({
@@ -16,6 +17,8 @@ module.exports = function(config, mongoose) {
 
   accountsRouter.route("/authenticate")
     .post(function(req, res) {
+
+      console.dir(req.body);
 
       logger.debug("username = " + req.body.username + ", password = " + req.body.password);
 
@@ -46,7 +49,13 @@ module.exports = function(config, mongoose) {
       				return;
       			}
 
-      			res.json(account.username);
+            csrf.secret().then(function(secret) {
+      				req.session.csrfSecret = secret;
+      				res.set("X-CSRF-Token", csrf.create(req.session.csrfSecret));
+      				res.json(account.username);
+      			});
+
+      			//res.json(account.username);
       		});
 
         }

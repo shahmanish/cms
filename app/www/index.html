@@ -12,9 +12,88 @@
 
   <body>
 
+    <button id="log-me-in">Log Me In</button><button id="add-transaction">Add Transaction</button>
 
     <script src="libs/jquery/dist/jquery.js"></script>
     <script src="libs/bootstrap/dist/js/bootstrap.js"></script>
     <script src="js/app_web_socket.js"></script>
+    <script src="libs/underscore/underscore.js"></script>
+    <script src="libs/backbone/backbone.js"></script>
+    <script>
+
+      var BaseModel = Backbone.Model.extend({
+        sync: function(method, model, options) {
+          if (!options) {
+            options = {};
+          }
+
+          options.beforeSend = function(xhr) {
+						xhr.setRequestHeader("X-CSRF-Token", window.csrfToken);
+					};
+					Backbone.sync.call(this, method, model, options)
+						.then(function(data, status, xhr) {
+							window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+					});
+
+        },
+        idAttribute: "_id"
+      });
+
+      var Page = BaseModel.extend({
+        urlRoot: "/api/page",
+        defaults: {
+          "title" : null,
+          "content" : null,
+          "category" : null,
+          "route" : null,
+          "author" : null,
+          "date": Date.now()
+        },
+        initialize: function() {
+          /*
+          this.on("change:title", function() {
+            console.dir(arguments);
+            console.log("title in my model changed.");
+          });
+          */
+        }
+      });
+
+      window.addEventListener("DOMContentLoaded", function() {
+  			document.getElementById("log-me-in")
+  				.addEventListener("click", function() {
+  					var xhr = new XMLHttpRequest();
+  					xhr.onreadystatechange = function() {
+  						if (xhr.readyState === 4) {
+  							window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+  						}
+  					}
+  					xhr.open("POST", "/account/authenticate");
+            xhr.setRequestHeader("content-type", "application/json");
+  					xhr.send(JSON.stringify({
+  						"username": "admin",
+  						"password": "password"
+  					}));
+  			});
+  			document.getElementById("add-transaction")
+  				.addEventListener("click", function() {
+            var p = new Page({});
+            p.set("title", "Introduction");
+            p.set("content", "This is first article");
+            p.set("category", "help");
+            p.set("route", "Home > intro");
+            p.set("author", "Bob");
+            p.set("description", "Welcome to my homepage");
+            p.save(null, {
+              success: function() {
+                console.dir(JSON.stringify(p));
+              }
+            });
+
+  			});
+  		});
+
+
+    </script>
   </body>
 </html>

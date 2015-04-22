@@ -41,8 +41,8 @@ module.exports = function(config, mongoose) {
 
   pagesRouter.route("/page")
     .post(function(req, res){
-      console.dir(req.body.page);
-      var t = new PageModel(req.body.page);
+      console.dir(req.body);
+      var t = new PageModel(req.body);
       t.save(function(err, page) {
         if (err) {
           console.log(err);
@@ -50,6 +50,9 @@ module.exports = function(config, mongoose) {
           return;
         }
 
+        // console.log(JSON.stringify(page, function() {
+        //   if (key === "_v")
+        // }));
         res.json(page);
 
       });

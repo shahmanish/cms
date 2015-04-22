@@ -41,4 +41,4 @@ function MyWebSocket(url) {
 }
 
 var logWebSocket = new MyWebSocket("ws:localhost:8080");
-logWebSocket.error("this is my new error");
+//logWebSocket.error("this is my new error");

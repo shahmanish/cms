@@ -1,70 +1,179 @@
-<div class="container">
-  <table class="table table-bordered table-hover">
-    <caption>Pages</caption>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Title</th>
-        <th>Date Modified</th>
-        <th>Date Created</th>
-        <th>Author</th>
-        <th>Category</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Getting started</td>
-        <td>12/3/2014</td>
-        <td>09/2/2014</td>
-        <td>Bob</td>
-        <td>Basic</td>
-        <td>
-          <a class="btn btn-primary" href="#" role="button">Edit</a>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-          <a class="btn btn-success" href="#" role="button">Publish</a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Learn about our mission</td>
-        <td>12/10/2014</td>
-        <td>09/5/2014</td>
-        <td>Harish</td>
-        <td>Basic</td>
-        <td>
-          <a class="btn btn-primary" href="#" role="button">Edit</a>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-          <a class="btn btn-success" href="#" role="button">Publish</a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>How do I contribute</td>
-        <td>1/3/2015</td>
-        <td>12/2/2014</td>
-        <td>Bob</td>
-        <td>Contribute</td>
-        <td>
-          <a class="btn btn-primary" href="#" role="button">Edit</a>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-          <a class="btn btn-success" href="#" role="button">Publish</a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">4</th>
-        <td>Testimonials</td>
-        <td>12/3/2014</td>
-        <td>09/2/2014</td>
-        <td>John</td>
-        <td>Customers</td>
-        <td>
-          <a class="btn btn-primary" href="#" role="button">Edit</a>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-          <a class="btn btn-success" href="#" role="button">Publish</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Intuit Boot Camp - CMS </title>
+    <link href='libs/bootstrap/dist/css/bootstrap.css' rel="stylesheet">
+    <link href='libs/bootstrap/dist/css/bootstrap-theme.min.css' rel="stylesheet">
+    <link href='css/site.css' rel="stylesheet">
+    <style>
+    </style>
+    <script id="page-record" type="template/handlebars">
+			<div>
+				<div>
+					<label>Title</label>
+					{{title}}
+				</div>
+				<div>
+					<label>Author:</label>
+					{{author}}
+				</div>
+				<div>
+					<label>Category:</label>
+					{{category}}
+				</div>
+			</div>
+		</script>
+		<script id="page-records" type="template/handlebars">
+			<table class="table table-bordered">
+        <caption>Pages</caption>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+  				{{#each pages}}
+  					<tr>
+  						<td>{{title}}</td>
+  						<td>{{author}}</td>
+  						<td>{{category}}</td>
+  					</tr>
+  				{{/each}}
+        </tbody>
+			</table>
+		</script>
+
+  </head>
+
+  <body>
+
+    <button id="log-me-in">Log Me In</button>
+		<br><br>
+		<button id="get-all-pages">Get All Pages</button>
+		<br><br>
+		<button id="create-page">Create Page</button>
+		<br><br>
+		<button id="add-page">Add Page</button>
+		<br><br>
+		<div id="view"></div>
+
+    <script src="libs/jquery/dist/jquery.js"></script>
+		<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="libs/underscore/underscore.js"></script>
+		<script src="libs/backbone/backbone.js"></script>
+		<script src="libs/handlebars/handlebars.js"></script>
+		<script>
+			function customSync(method, model, options) {
+				if (!options) {
+					options = {};
+				}
+				options.beforeSend = function(xhr) {
+					xhr.setRequestHeader("X-CSRF-Token", window.csrfToken || document.cookies);
+				};
+				Backbone.sync.call(this, method, model, options)
+					.then(function(data, status, xhr) {
+						window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+					});
+			}
+			var BaseModel = Backbone.Model.extend({
+				sync: customSync,
+				idAttribute: "_id"
+			});
+			var BaseCollection = Backbone.Collection.extend({
+				sync: customSync
+			});
+      var Page = BaseModel.extend({
+        urlRoot: "/api/page",
+        defaults: {
+          "title" : null,
+          "content" : null,
+          "category" : null,
+          "route" : null,
+          "author" : null,
+          "date": Date.now()
+        },
+        initialize: function() {
+          /*
+          this.on("change:title", function() {
+            console.dir(arguments);
+            console.log("title in my model changed.");
+          });
+          */
+        }
+      });
+			var Pages = BaseCollection.extend({
+				model: Page,
+				url: "/api/pages"
+			});
+			var pages = new Pages();
+
+			window.addEventListener("DOMContentLoaded", function() {
+				document.getElementById("log-me-in")
+          .addEventListener("click", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === 4) {
+                window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+              }
+            }
+            xhr.open("POST", "/account/authenticate");
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send(JSON.stringify({
+              "username": "admin",
+              "password": "password"
+            }));
+        });
+				document.getElementById("get-all-pages")
+					.addEventListener("click", function() {
+						console.log(pages.models);
+						pages.fetch({
+							success: function() {
+								var source = document.getElementById("page-records").innerHTML;
+								var template = Handlebars.compile(source);
+								var html = template({
+									pages:  pages.toJSON()
+								});
+								document.getElementById("view").innerHTML = html;
+							}
+						})
+					});
+				document.getElementById("create-page")
+					.addEventListener("click", function() {
+						pages.create({
+              "title" : "Introduction",
+              "content" : "This is first article",
+              "category" : "help",
+              "route" : "Home > intro",
+              "author" : "Bob",
+              "date" : Date.now()
+            });
+					});
+				document.getElementById("add-page")
+					.addEventListener("click", function() {
+
+            var p = new Page({});
+            p.set("title", "Introduction");
+            p.set("content", "This is first article");
+            p.set("category", "help");
+            p.set("route", "Home > intro");
+            p.set("author", "Bob");
+            p.set("description", "Welcome to my homepage");
+            p.save(null, {
+              success: function() {
+                console.dir(p.attributes);
+              }
+            });
+
+						pages.add(p);
+						var source = document.getElementById("page-record").innerHTML;
+						var template = Handlebars.compile(source);
+						var html = template(p.attributes);
+						document.getElementById("view").innerHTML = html;
+				});
+			});
+
+      </script>
+  </body>
+</html>

@@ -34,7 +34,9 @@ window.addEventListener("DOMContentLoaded", function() {
       "password": passwordValue
     }
 
-		xhr.open("POST", "http://localhost:8080/api/authenticate", true);
+		console.dir(o);
+
+		xhr.open("POST", "http://localhost:8080/accounts/authenticate", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(o));
 
