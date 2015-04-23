@@ -34,8 +34,8 @@ module.exports = function(config, mongoose) {
 
   donationsRouter.route("/donation")
     .post(function(req, res){
-      console.dir(req.body.donation);
-      var t = new DonationModel(req.body.donation);
+      console.dir(req.body);
+      var t = new DonationModel(req.body);
       t.save(function(err, donation) {
         if (err) {
           console.log(err);

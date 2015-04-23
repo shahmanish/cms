@@ -7,11 +7,14 @@ module.exports = function(config) {
     mongoose = require("mongoose"),
     fs = require('fs'),
     session = require('express-session'),
+    cookieParser = require('cookie-parser'),
     passport = require("passport"),
     csrf = require("csrf")(),
+    path = require("path"),
     crypto = require("crypto"),
     app = express(),
-    logger = require("./logger")(config.loggerConfig);
+    logger = require("./logger")(config.loggerConfig),
+    indexPath = path.resolve(path.join("app", "www", "index.html"));
 
   config.logger = logger;
 
@@ -23,12 +26,22 @@ module.exports = function(config) {
   	done(null, user);
 	});
 
+  // serve all static files regardless
+	app.use("/js", express.static(config.httpServer.jsRoot));
+	app.use("/libs", express.static(config.httpServer.libsRoot));
+	app.use("/css", express.static(config.httpServer.cssRoot));
+	app.use("/i", express.static(config.httpServer.imageRoot));
+	app.use("/media", express.static(config.httpServer.mediaRoot));
+
   app.set("json replacer", function(key, value) {
       if (key === "__v") {
         return undefined;
       }
       return value;
   });
+
+  // parse cookies...
+	app.use(cookieParser());
 
 	app.use(session({
 		resave: false,
@@ -44,7 +57,7 @@ module.exports = function(config) {
     config.mongoServer.host + ":" + config.mongoServer.port
     + "/" + config.mongoServer.dbName);
 
-  app.use("/api", bodyParser.json());
+  app.use("/api", bodyParser.json({limit: '50mb'}));
   app.use("/account", bodyParser.json());
   //app.use("/api", bodyParser.urlencoded({ extended: true }));
 
@@ -95,11 +108,20 @@ module.exports = function(config) {
   app.use("/api", require("./router/pages.js")(config, mongoose));
   app.use("/api", require("./router/donations.js")(config, mongoose));
   app.use("/api", require("./router/galleries.js")(config, mongoose));
-  app.use("/account", require("./router/accounts.js")(config, mongoose));
+  // disable authentication
+  //app.use("/account", require("./router/accounts.js")(config, mongoose));
 
   app.use(express.static(config.httpServer.wwwRoot));
 
-
+/**
+  // all other requests should return index.html
+	// needed for HTML5 history API
+	app.use("/", function(req, res) {
+		res.sendFile(indexPath, function(err) {
+			if (err) res.status(err.status).end();
+		});
+	});
+*/
   return app;
 
 }

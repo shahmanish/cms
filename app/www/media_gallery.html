@@ -1,34 +1,175 @@
-<div class="container">
-  <table class="table table-bordered table-hover">
-    <caption>Media gallery</caption>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Filename</th>
-        <th>Type</th>
-        <th>Author</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Intro</td>
-        <td>.jpg</td>
-        <td>Bob</td>
-        <td>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Donate</td>
-        <td>.png</td>
-        <td>Bob</td>
-        <td>
-          <a class="btn btn-default" href="#" role="button">Delete</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Intuit Boot Camp - CMS </title>
+    <link href='libs/bootstrap/dist/css/bootstrap.css' rel="stylesheet">
+    <link href='libs/bootstrap/dist/css/bootstrap-theme.min.css' rel="stylesheet">
+    <link href='css/site.css' rel="stylesheet">
+    <style>
+    </style>
+    <script id="gallery-record" type="template/handlebars">
+			<div>
+				<div>
+					<label>FileName</label>
+					{{fileName}}
+				</div>
+				<div>
+					<label>Type:</label>
+					{{type}}
+				</div>
+				<div>
+					<label>Author:</label>
+					{{author}}
+				</div>
+			</div>
+		</script>
+		<script id="gallery-records" type="template/handlebars">
+			<table class="table table-bordered">
+        <caption>Galleries</caption>
+        <thead>
+          <tr>
+            <th>Filename</th>
+            <th>Type</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+  				{{#each galleries}}
+  					<tr>
+  						<td>{{fileName}}</td>
+              <td>{{type}}</td>
+  						<td>{{author}}</td>
+  					</tr>
+  				{{/each}}
+        </tbody>
+			</table>
+		</script>
+
+  </head>
+
+  <body>
+
+    <button id="log-me-in">Log Me In</button>
+		<br><br>
+		<button id="get-all-galleries">Get All Galleries</button>
+		<br><br>
+		<button id="create-gallery">Create Gallery</button>
+		<br><br>
+		<button id="add-gallery">Add Gallery</button>
+		<br><br>
+		<div id="view"></div>
+
+    <script src="libs/jquery/dist/jquery.js"></script>
+		<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="libs/underscore/underscore.js"></script>
+		<script src="libs/backbone/backbone.js"></script>
+		<script src="libs/handlebars/handlebars.js"></script>
+    <script src="js/templates.js"></script>
+		<script>
+			function customSync(method, model, options) {
+				if (!options) {
+					options = {};
+				}
+				options.beforeSend = function(xhr) {
+					xhr.setRequestHeader("X-CSRF-Token", window.csrfToken || document.cookies);
+				};
+				Backbone.sync.call(this, method, model, options)
+					.then(function(data, status, xhr) {
+						window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+					});
+			}
+			var BaseModel = Backbone.Model.extend({
+				sync: customSync,
+				idAttribute: "_id"
+			});
+			var BaseCollection = Backbone.Collection.extend({
+				sync: customSync
+			});
+      var Gallery = BaseModel.extend({
+        urlRoot: "/api/gallery",
+        defaults: {
+          "name" : null,
+          "amount" : 0,
+          "creditCard" : null,
+          "date": Date.now()
+        },
+        initialize: function() {
+          /*
+          this.on("change:title", function() {
+            console.dir(arguments);
+            console.log("title in my model changed.");
+          });
+          */
+        }
+      });
+			var Galleries = BaseCollection.extend({
+				model: Gallery,
+				url: "/api/galleries"
+			});
+			var galleries = new Galleries();
+
+			window.addEventListener("DOMContentLoaded", function() {
+				document.getElementById("log-me-in")
+          .addEventListener("click", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === 4) {
+                window.csrfToken = xhr.getResponseHeader("X-CSRF-Token");
+              }
+            }
+            xhr.open("POST", "/account/authenticate");
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send(JSON.stringify({
+              "username": "admin",
+              "password": "password"
+            }));
+        });
+    				document.getElementById("get-all-galleries")
+					.addEventListener("click", function() {
+						console.log(galleries.models);
+						galleries.fetch({
+							success: function() {
+								//var source = document.getElementById("gallery-records").innerHTML;
+								//var template = Handlebars.compile(source);
+                var template = window.templates["galleries"];
+								var html = template({
+									galleries:  galleries.toJSON()
+								});
+								document.getElementById("view").innerHTML = html;
+							}
+						})
+					});
+				document.getElementById("create-gallery")
+					.addEventListener("click", function() {
+						galleries.create({
+                  "fileName" : "intro",
+                  "type" : "image/jpg",
+                  "author" : "Bob"
+              });
+					});
+
+				document.getElementById("add-gallery")
+					.addEventListener("click", function() {
+
+            var p = new Gallery({});
+            p.set("fileName", "intro");
+            p.set("type", "image/jpg");
+            p.set("author", "Bob");
+            p.save(null, {
+              success: function() {
+                console.dir(p.attributes);
+              }
+            });
+
+						galleries.add(p);
+						//var source = document.getElementById("gallery-record").innerHTML;
+						//var template = Handlebars.compile(source);
+            var template = window.templates["gallery"];
+						var html = template(p.attributes);
+						document.getElementById("view").innerHTML = html;
+				});
+			});
+
+      </script>
+  </body>
+</html>

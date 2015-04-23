@@ -2,6 +2,7 @@ module.exports = function(config, mongoose) {
 
   var
     express = require("express"),
+    fs = require('fs'),
     galleriesRouter = express.Router();
 
   var gallerySchema = mongoose.Schema({

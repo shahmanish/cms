@@ -64,6 +64,7 @@
 		<script src="libs/underscore/underscore.js"></script>
 		<script src="libs/backbone/backbone.js"></script>
 		<script src="libs/handlebars/handlebars.js"></script>
+    <script src="js/templates.js"></script>
 		<script>
 			function customSync(method, model, options) {
 				if (!options) {
@@ -130,8 +131,9 @@
 						console.log(pages.models);
 						pages.fetch({
 							success: function() {
-								var source = document.getElementById("page-records").innerHTML;
-								var template = Handlebars.compile(source);
+								//var source = document.getElementById("page-records").innerHTML;
+								//var template = Handlebars.compile(source);
+                var template = window.templates["pages"];
 								var html = template({
 									pages:  pages.toJSON()
 								});
@@ -167,8 +169,9 @@
             });
 
 						pages.add(p);
-						var source = document.getElementById("page-record").innerHTML;
-						var template = Handlebars.compile(source);
+						//var source = document.getElementById("page-record").innerHTML;
+						//var template = Handlebars.compile(source);
+            var template = window.templates["page"];
 						var html = template(p.attributes);
 						document.getElementById("view").innerHTML = html;
 				});
