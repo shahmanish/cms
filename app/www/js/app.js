@@ -19,5 +19,9 @@ window.addEventListener("DOMContentLoaded", function() {
 			appRouter.navigate("/pages", { trigger: true });
 	});
 
+	$("#donations-button").on("click", function() {
+			appRouter.navigate("/donations", { trigger: true });
+	});
+
 
 });
