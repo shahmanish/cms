@@ -1,9 +1,7 @@
+var pages = new Pages();
+
 window.addEventListener("DOMContentLoaded", function() {
 
-
-	var appRouter = new AppRouter({
-		el: $("#view-content")[0]
-	});
 
   var indexView = new IndexView({
     el: $("#main-content")[0],
@@ -17,6 +15,10 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	$("#pages-button").on("click", function() {
 			appRouter.navigate("/pages", { trigger: true });
+	});
+
+	$("#page-add-button").on("click", function() {
+			appRouter.navigate("/newPage", { trigger: true });
 	});
 
 	$("#donations-button").on("click", function() {

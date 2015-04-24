@@ -84,6 +84,10 @@ this["templates"]["page"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"
     + "</div></div>";
 },"useData":true});
 
+this["templates"]["page_new"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"container\"><p class=\"lead\">Create a new page.</p><form><div class=\"form-group\"><label for=\"inputTitle\">Title</label><input type=\"text\" class=\"form-control\" id=\"title\" placeholder=\"Getting started\"></div><div class=\"form-group\"><label for=\"inputCategory\">Category</label><input type=\"text\" class=\"form-control\" id=\"category\" placeholder=\"eg. Intro\"></div><div class=\"form-group\"><label for=\"inputAuthor\">Author</label><input type=\"text\" class=\"form-control\" id=\"author\" placeholder=\"John\"></div><div class=\"form-group\"><label for=\"inputContent\">Content</label><textarea class=\"form-control\" rows=\"3\" id=\"content\"></textarea></div><div class=\"form-group\"><label for=\"inputRoute\">Slug/Route</label><input type=\"text\" class=\"form-control\" id=\"route\" placeholder=\"Home>Intro\"></div><button type=\"button\" class=\"btn btn-default\" id=\"page-create-button\">Submit</button></form></div>";
+},"useData":true});
+
 this["templates"]["pages"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
