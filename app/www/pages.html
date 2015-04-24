@@ -49,15 +49,8 @@
 
   <body>
 
-    <button id="log-me-in">Log Me In</button>
-		<br><br>
 		<button id="get-all-pages">Get All Pages</button>
-		<br><br>
-		<button id="create-page">Create Page</button>
-		<br><br>
-		<button id="add-page">Add Page</button>
-		<br><br>
-		<div id="view"></div>
+    <article id="view-content"></article>
 
     <script src="libs/jquery/dist/jquery.js"></script>
 		<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
@@ -104,11 +97,50 @@
           */
         }
       });
+
 			var Pages = BaseCollection.extend({
 				model: Page,
 				url: "/api/pages"
 			});
-			var pages = new Pages();
+
+      var PagesView = Backbone.View.extend({
+				events: {
+					"click tbody": "pageTransaction"
+				},
+				template: templates["pages"],
+				render: function() {
+					this.$el.html(this.template({
+						pages: this.collection
+					}));
+				},
+				initialize: function(options) {
+					this.options = options;
+				},
+				pageTransaction: function(e) {
+					if (e.target instanceof HTMLButtonElement) {
+						console.dir($(e.target).attr("data-model-id"));
+						console.log("handle page fired!");
+						console.dir($(e.target).closest("tr"));
+					}
+				}
+			});
+
+			var ps = new Pages();
+
+      document.getElementById("get-all-pages")
+        .addEventListener("click", function() {
+  			ps.fetch({ success: function() {
+          console.log(ps.models);
+  				var psView = new PagesView({
+  					el: $("#view-content"),
+  					collection: ps.toJSON()
+  				});
+  				console.dir(psView);
+  				psView.render();
+  			}});
+      });
+
+/**
 
 			window.addEventListener("DOMContentLoaded", function() {
 				document.getElementById("log-me-in")
@@ -176,7 +208,7 @@
 						document.getElementById("view").innerHTML = html;
 				});
 			});
-
+*/
       </script>
   </body>
 </html>

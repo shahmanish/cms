@@ -78,6 +78,7 @@ module.exports = function(config) {
   */
 
   // adding csrf header
+  /** disable csrf
   app.use("/api", function(req, res, next) {
 
     if (!req.user) {
@@ -104,6 +105,7 @@ module.exports = function(config) {
 
 
   });
+  */
 
   app.use("/api", require("./router/pages.js")(config, mongoose));
   app.use("/api", require("./router/donations.js")(config, mongoose));
@@ -113,7 +115,7 @@ module.exports = function(config) {
 
   app.use(express.static(config.httpServer.wwwRoot));
 
-/**
+
   // all other requests should return index.html
 	// needed for HTML5 history API
 	app.use("/", function(req, res) {
@@ -121,7 +123,7 @@ module.exports = function(config) {
 			if (err) res.status(err.status).end();
 		});
 	});
-*/
+
   return app;
 
 }

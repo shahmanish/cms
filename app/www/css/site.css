@@ -1,3 +1,6 @@
 body {
 
+  #mainContainer {
+    height: 300px;
+  }
 }

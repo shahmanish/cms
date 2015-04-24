@@ -64,6 +64,14 @@ this["templates"]["gallery"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta
     + "</div></div>";
 },"useData":true});
 
+this["templates"]["home"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"col-xs-offset-3 col-xs-6 col-xs-offset-3\"><p class=\"text-center\">Our campaigners have done some pretty amazing things to raise money for clean water. And they’re thinking of new things to do every day. What will you do?</p></div>";
+},"useData":true});
+
+this["templates"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"col-xs-2\"><ul class=\"nav nav-pills nav-stacked\"><li role=\"presentation\" class=\"active\"><a href=\"#\">Home</a></li><li role=\"presentation\"><a href=\"#\">Profile</a></li><li role=\"presentation\"><a href=\"#\">Messages</a></li></ul></div><div class=\"col-xs-10 content\">content</div><div class=\"row\"><div class=\"col-xs-offset-8 col-xs-4\"><a href=\"#\">Terms</a> <a href=\"#\">Copyright</a></div></div>";
+},"useData":true});
+
 this["templates"]["page"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
@@ -85,11 +93,17 @@ this["templates"]["pages"] = Handlebars.template({"1":function(depth0,helpers,pa
     + alias3(((helper = (helper = helpers.author || (depth0 != null ? depth0.author : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"author","hash":{},"data":data}) : helper)))
     + "</td><td>"
     + alias3(((helper = (helper = helpers.category || (depth0 != null ? depth0.category : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"category","hash":{},"data":data}) : helper)))
-    + "</td></tr>";
+    + "</td><td><button data-model-id=\""
+    + alias3(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"_id","hash":{},"data":data}) : helper)))
+    + "\">View</button></td></tr>";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     var stack1;
 
   return "<table class=\"table table-bordered\"><caption>Pages</caption><thead><tr><th>Title</th><th>Author</th><th>Category</th></tr></thead><tbody>"
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.pages : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "</tbody></table>";
+},"useData":true});
+
+this["templates"]["pages_default"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "Listing of pages goes here.";
 },"useData":true});
