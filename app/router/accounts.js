@@ -36,7 +36,7 @@ module.exports = function(config, mongoose) {
         if (!account) {
           logger.debug("login failed: username and password did not match");
           req.logout();
-          res.json("null");
+          return res.status(401).end();
         } else {
 
           logger.debug("login success: username and password matched");

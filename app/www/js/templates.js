@@ -14,6 +14,10 @@ this["templates"]["donation"] = Handlebars.template({"compiler":[6,">= 2.0.0-bet
     + "</div></div>";
 },"useData":true});
 
+this["templates"]["donation_new"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"container\"><div class=\"panel panel-primary\"><div class=\"panel-heading\"><h3 class=\"panel-title\">Please provide the payment information.</h3></div><div class=\"panel-body\"><form><div class=\"form-group\"><label class=\"sr-only\" for=\"amount\">Amount (in dollars)</label><div class=\"input-group\"><div class=\"input-group-addon\">$</div><input type=\"text\" class=\"form-control\" id=\"amount\" placeholder=\"Amount\"><div class=\"input-group-addon\">.00</div></div></div><div class=\"form-group\"><label for=\"paymentMethod\">Payment Method</label><select class=\"form-control\" id=\"paymentMethod\"><option>Visa</option><option>Mastercard</option><option>Amex</option></select></div><div class=\"form-group\"><label for=\"creditCardNumber\">Credit Card Number</label><input type=\"text\" class=\"form-control\" id=\"creditCardNumber\" placeholder=\"xxxx-xxxx-xxxx-xxxx\"></div><div class=\"form-group\"><label for=\"dateOfExpiry\">Expiry</label><input type=\"text\" class=\"form-control\" id=\"dateOfExpiry\" placeholder=\"MM/YY\"></div><div class=\"form-group\"><label for=\"cvv\">CVV</label><input type=\"text\" class=\"form-control\" id=\"cvv\" placeholder=\"xxx\"></div><div class=\"form-group\"><label for=\"addres\">Address</label><input type=\"text\" class=\"form-control\" id=\"address\" placeholder=\"123 Main St, Mountain View, CA 94040\"></div><div class=\"form-group\"><label for=\"name\">Name</label><input type=\"text\" class=\"form-control\" id=\"name\" placeholder=\"John Doe\"></div><div class=\"form-group\"><label for=\"comments\">Comments</label><textarea class=\"form-control\" rows=\"3\" id=\"comments\"></textarea></div><button type=\"button\" class=\"btn btn-primary\" id=\"donation-create-button\">Submit</button></form></div></div></div>";
+},"useData":true});
+
 this["templates"]["donations"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 
@@ -66,6 +70,10 @@ this["templates"]["gallery"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta
 
 this["templates"]["home"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
     return "<div class=\"col-xs-offset-3 col-xs-6 col-xs-offset-3\"><p class=\"text-center\">Our campaigners have done some pretty amazing things to raise money for clean water. And they’re thinking of new things to do every day. What will you do?</p></div>";
+},"useData":true});
+
+this["templates"]["login"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    return "<div class=\"form-group\"><label for=\"inputUserName\">Username</label><input type=\"text\" class=\"form-control\" id=\"inputUserName\" placeholder=\"Enter your username\"></div><div class=\"form-group\"><label for=\"inputPassword\">Password</label><input type=\"password\" class=\"form-control\" id=\"inputPassword\" placeholder=\"Password\"></div><button type=\"button\" id=\"login-submit-button\" class=\"btn btn-default\">Submit</button>";
 },"useData":true});
 
 this["templates"]["main"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {

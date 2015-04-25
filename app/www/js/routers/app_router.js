@@ -4,6 +4,8 @@ var AppRouter = Backbone.Router.extend({
 		"pages": "showPages",
 		"donations": "showDonations",
 		"newPage": "showPageForm",
+		"newDonation": "showDonationForm",
+		"signin": "showLoginForm"
 	},
 
 	showPages: function() {
@@ -87,7 +89,56 @@ var AppRouter = Backbone.Router.extend({
 
 	initialize: function(options) {
 		this.options = options;
+	},
+
+	showDonationForm: function() {
+
+		// only do this if a new is being created
+		if (this.currentView) {
+			this.currentView.undelegateEvents();
+		}
+
+		// create a new view
+		this.currentView = new DonationAddView({
+			// passing the element passed into the router
+			el: $("#main-content")[0],
+			// give view access to the router to navigate in response to events
+			router: this
+		});
+
+		// render the new view
+		this.currentView.render();
+	},
+
+	initialize: function(options) {
+		this.options = options;
+	},
+
+	showLoginForm: function() {
+
+		// only do this if a new is being created
+		if (this.currentView) {
+			this.currentView.undelegateEvents();
+		}
+
+		// create a new view
+		this.currentView = new LoginView({
+			// passing the element passed into the router
+			el: $("#main-content")[0],
+			// give view access to the router to navigate in response to events
+			router: this,
+			routeRedirect: "pages"
+		});
+
+		// render the new view
+		this.currentView.render();
+	},
+
+	initialize: function(options) {
+		this.options = options;
 	}
+
+
 
 
 });

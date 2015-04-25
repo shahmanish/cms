@@ -1,4 +1,5 @@
 var pages = new Pages();
+var donations = new Donations();
 
 window.addEventListener("DOMContentLoaded", function() {
 
@@ -23,6 +24,14 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	$("#donations-button").on("click", function() {
 			appRouter.navigate("/donations", { trigger: true });
+	});
+
+	$("#donation-add-button").on("click", function() {
+			appRouter.navigate("/newDonation", { trigger: true });
+	});
+
+  $("#signin-button").on("click", function() {
+			appRouter.navigate("/signin", { trigger: true });
 	});
 
 
