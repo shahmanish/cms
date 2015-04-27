@@ -58,7 +58,7 @@ module.exports = function(grunt) {
         ext: ".min.hbs"
       }
     },
-/*    sass: {
+   sass: {
 			main: {
         options: {
           sourcemap: "none"
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
 					"app/www/css/site.css": "app/sass/site.scss"
 				}
 			}
-		}, */
+		},
 		cssmin: {
 			main: {
         options: {
@@ -128,7 +128,7 @@ module.exports = function(grunt) {
         }
       } */
 		},
-    
+
 /*    compress: {
       js: {
         options: {
@@ -157,6 +157,15 @@ module.exports = function(grunt) {
 				options: {
 					spawn: false
 				}
+			},
+      css: {
+				files: "app/sass/**/*.scss",
+        tasks: ["sass"]
+				//tasks: ["sass","cssmin","compress:css"]
+			},
+			js: {
+				files: ["app/www/js/**/*.js", "!app/www/js/*.min.js"],
+				//tasks: ["uglify","compress:js"]
 			}
 		}
   });
@@ -165,7 +174,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-handlebars");
   grunt.loadNpmTasks("grunt-contrib-htmlmin");
   grunt.loadNpmTasks("grunt-contrib-cssmin");
-//  grunt.loadNpmTasks("grunt-contrib-sass");
+  grunt.loadNpmTasks("grunt-contrib-sass");
   grunt.loadNpmTasks("grunt-contrib-uglify");
 //  grunt.loadNpmTasks("grunt-contrib-compress");
 
@@ -189,6 +198,6 @@ module.exports = function(grunt) {
   });
 
   //grunt.registerTask("default", ["webServer"]);
-  grunt.registerTask("default", ["cssmin","htmlmin","handlebars","uglify","webServer","watch"]);
+  grunt.registerTask("default", ["sass","cssmin","htmlmin","handlebars","uglify","webServer","watch"]);
 
 };

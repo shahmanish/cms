@@ -1,6 +1,2 @@
-body {
-
-  #mainContainer {
-    height: 300px;
-  }
-}
+body > header {
+  background-color: blue; }
